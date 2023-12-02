@@ -32,7 +32,7 @@ class ConfigurationProvider {
         var minutesText = WatchUi.loadResource(minutesArray[minutes]);
 
         var hoursSplit = splitString(hourText, " ");
-        var minutesSplit = splitString(minutesText, " ");
+        var minutesSplit = minutes != 0 ? splitString(minutesText, " ") : [];
 
         return {
             :hoursSplit => hoursSplit,

@@ -38,17 +38,15 @@ class MiniLinguaTime extends WatchUi.Drawable {
         var regularFontHeight = dc.getFontHeight(regularFont);
 
         var hoursSplitSize = hoursSplit.size();
-        for (var i = 0; i < hoursSplitSize; i++) {
-            var hour = hoursSplit[i];
-            var y = centerY - (hoursSplitSize - i) * boldFontHeight;
-            drawValue(dc, boldFont, configurationProvider.hourColor, centerX, y, hour);
-        }
+        var minutesSplitSize = minutesSplit.size();
+        var totalHoursHeight = hoursSplitSize * boldFontHeight;
+        var totalTextHeight = totalHoursHeight + minutesSplitSize * regularFontHeight;
 
-        for (var i = 0; i < minutesSplit.size(); i++) {
-            var minutes = minutesSplit[i];
-            var y = centerY + i * regularFontHeight;
-            drawValue(dc, regularFont, configurationProvider.minutesColor, centerX, y, minutes);
-        }
+        var topHoursY = centerY - totalTextHeight / 2;
+        var topMinutesY = topHoursY + totalHoursHeight;
+
+        drawValues(dc, boldFont, boldFontHeight, configurationProvider.hourColor, centerX, topHoursY, hoursSplit);
+        drawValues(dc, regularFont, regularFontHeight, configurationProvider.minutesColor, centerX, topMinutesY, minutesSplit);
     }
 
     function loadFontIfNeeded(dc, screenWidth, screenHeight) {
@@ -93,8 +91,13 @@ class MiniLinguaTime extends WatchUi.Drawable {
         return maxColumnHeight < screenHeight && maxRowWidth < screenWidth;
     }
 
-    function drawValue(dc, font, color, x, y, text) {
-        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(x, y, font, text, Graphics.TEXT_JUSTIFY_CENTER);
+    function drawValues(dc, font, fontHeight, color, x, topY, values) {
+        for (var i = 0; i < values.size(); i++) {
+            var value = values[i];
+            var y = topY + i * fontHeight;
+
+            dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(x, y, font, value, Graphics.TEXT_JUSTIFY_CENTER);
+        }
     }
 }
